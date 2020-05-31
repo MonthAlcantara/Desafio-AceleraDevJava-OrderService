@@ -13,9 +13,7 @@ import br.com.codenation.repository.ProductRepositoryImpl;
 public class OrderServiceImpl implements OrderService {
     private ProductRepository productRepository = new ProductRepositoryImpl();
 
-    /**
-     * Calculate the sum of all OrderItems
-     */
+
     @Override
     public Double calculateOrderValue(List<OrderItem> items) {
         Double comDesconto = items.stream().filter(i -> productRepository.findById(i.getProductId()).get().getIsSale())
@@ -27,22 +25,18 @@ public class OrderServiceImpl implements OrderService {
         return (comDesconto * 0.8) + semDesconto;
     }
 
-    /**
-     * Map from idProduct List to Product Set
-     */
+
     @Override
     public Set<Product> findProductsById(List<Long> ids) {
         return ids.stream()
-                .map(id -> productRepository
-                        .findById(id))
+                .map(id -> productRepository.findById(id))
                 .filter(Optional -> Optional.isPresent())
-                .map(Optional -> Optional.get()).collect(Collectors.toSet());
+                .map(Optional -> Optional.get())
+                .collect(Collectors.toSet());
 
     }
 
-    /**
-     * Calculate the sum of all Orders(List<OrderIten>)
-     */
+
     @Override
     public Double calculateMultipleOrders(List<List<OrderItem>> orders) {
         return orders.stream()
@@ -51,9 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    /**
-     * Group products using isSale attribute as the map key
-     */
+
     @Override
     public Map<Boolean, List<Product>> groupProductsBySale(List<Long> productIds) {
         return productIds.stream().filter(id -> id > 0 && id != null)
